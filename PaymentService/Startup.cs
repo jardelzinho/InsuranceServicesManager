@@ -31,6 +31,9 @@ namespace PaymentService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var settings = new RabbitMQSettings();
+            Configuration.GetSection("RabbitMQSettings").Bind(settings);
+
             services.AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
                 .AddNewtonsoftJson(opt =>
@@ -43,7 +46,7 @@ namespace PaymentService
             services.AddMediatR();
             services.AddLogingBehaviour();
             services.AddSingleton<PolicyAccountNumberGenerator>();
-            services.AddRabbitListeners();
+            services.AddRabbitListeners(settings);
             services.AddBackgroundJobs(Configuration.GetSection("BackgroundJobs").Get<BackgroundJobsConfig>());
         }
 

@@ -3,6 +3,7 @@ FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build
 ENV APP_HOME /opt/app
 RUN mkdir $APP_HOME
 WORKDIR $APP_HOME
+EXPOSE 5060 5061
 
 COPY PolicyService.Api/*.csproj $APP_HOME/PolicyService.Api/
 COPY PolicySearchService.Api/*.csproj $APP_HOME/PolicySearchService.Api/
@@ -20,6 +21,6 @@ RUN dotnet publish -c Release -o out
 
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1 AS final
 WORKDIR /app
-ENV ASPNETCORE_URLS=http://+:5060
+#ENV ASPNETCORE_URLS=http://+:5060
 COPY --from=publish /opt/app/PolicySearchService/out ./
 ENTRYPOINT ["dotnet", "PolicySearchService.dll"]

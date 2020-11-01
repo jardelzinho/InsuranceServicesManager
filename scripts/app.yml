@@ -1,5 +1,8 @@
-version: '3'
-
+version: '3.4'
+networks:
+  scripts_default:  
+    external: true
+      
 services:
   dotnet-agent-portal-gateway:
     build: 
@@ -7,23 +10,45 @@ services:
       dockerfile: AgentPortalApiGateway/Dockerfile
     image: dotnet-agent-portal-gateway
     container_name: dotnet-agent-portal-gateway
-    network_mode: host
-
+    ports:
+      - "8099:8099"
+      - "9000:9000"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_HTTPS_PORT: 9000
+      ASPNETCORE_URLS: ${ASPNETCORE_URLS_API_GATEWAY}
+    #   ASPNETCORE_Kestrel__Certificates__Default__Password: ${ASPNETCORE_KESTREL_CERTIFICATE_PASSWORD}
+    #   ASPNETCORE_Kestrel__Certificates__Default__Path: ${ASPNETCORE_KESTREL_CERTIFICATE_GATEWAY_PATH}
+    # volumes:
+    #   - ${CERTIFICATE_PATH}:/root/.dotnet/https
+    
+    
   dotnet-auth-service:
     build: 
       context: ../
       dockerfile: AuthService/Dockerfile
     image: dotnet-auth-service
     container_name: dotnet-auth-service
-    network_mode: host
+    ports:
+      - "6060:6060"
+      - "6061:6061"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_HTTPS_PORT: 6061
+      ASPNETCORE_URLS: ${ASPNETCORE_URLS_AUTH_SERVICE}
+    #   ASPNETCORE_Kestrel__Certificates__Default__Password: ${ASPNETCORE_KESTREL_CERTIFICATE_PASSWORD}
+    #   ASPNETCORE_Kestrel__Certificates__Default__Path: ${ASPNETCORE_KESTREL_CERTIFICATE_PATH}
+    # volumes:
+    #   - ${CERTIFICATE_PATH}:/root/.dotnet/https
+      
   
-  dotnet-chat-service:
-    build: 
-      context: ../
-      dockerfile: ChatService/Dockerfile
-    image: dotnet-chat-service
-    container_name: dotnet-chat-service
-    network_mode: host
+  #dotnet-chat-service:
+  #  build: 
+  #    context: ../
+  #    dockerfile: ChatService/Dockerfile
+  #  image: dotnet-chat-service
+  #  container_name: dotnet-chat-service
+    #network_mode: host
 
   dotnet-payment-service:
     build: 
@@ -31,7 +56,18 @@ services:
       dockerfile: PaymentService/Dockerfile
     image: dotnet-payment-service
     container_name: dotnet-payment-service
-    network_mode: host
+    ports:
+      - "5070:5070"
+      - "5071:5071"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_HTTPS_PORT: 5071
+      ASPNETCORE_URLS: ${ASPNETCORE_URLS_PAYMENT_SERVICE}
+      ASPNETCORE_Kestrel__Certificates__Default__Password: ${ASPNETCORE_KESTREL_CERTIFICATE_PASSWORD}
+      ASPNETCORE_Kestrel__Certificates__Default__Path: ${ASPNETCORE_KESTREL_CERTIFICATE_PATH}
+    volumes:
+      - ${CERTIFICATE_PATH}:/root/.dotnet/https
+      
 
   dotnet-policy-search-service:
     build: 
@@ -39,7 +75,18 @@ services:
       dockerfile: PolicySearchService/Dockerfile
     image: dotnet-policy-search-service
     container_name: dotnet-policy-search-service
-    network_mode: host
+    ports:
+      - "5060:5060"
+      - "5061:5061"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_HTTPS_PORT: 5061
+      ASPNETCORE_URLS: ${ASPNETCORE_URLS_POLICYSEARCH_SERVICE}
+      ASPNETCORE_Kestrel__Certificates__Default__Password: ${ASPNETCORE_KESTREL_CERTIFICATE_PASSWORD}
+      ASPNETCORE_Kestrel__Certificates__Default__Path: ${ASPNETCORE_KESTREL_CERTIFICATE_PATH}
+    volumes:
+      - ${CERTIFICATE_PATH}:/root/.dotnet/https
+      
 
   dotnet-policy-service:
     build: 
@@ -47,7 +94,18 @@ services:
       dockerfile: PolicyService/Dockerfile
     image: dotnet-policy-service
     container_name: dotnet-policy-service
-    network_mode: host
+    ports:
+      - "5050:5050"
+      - "5051:5051"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_HTTPS_PORT: 5051
+      ASPNETCORE_URLS: ${ASPNETCORE_URLS_POLICY_SERVICE}
+      ASPNETCORE_Kestrel__Certificates__Default__Password: ${ASPNETCORE_KESTREL_CERTIFICATE_PASSWORD}
+      ASPNETCORE_Kestrel__Certificates__Default__Path: ${ASPNETCORE_KESTREL_CERTIFICATE_PATH}
+    volumes:
+      - ${CERTIFICATE_PATH}:/root/.dotnet/https
+      
 
   dotnet-pricing-service:
     build: 
@@ -55,7 +113,19 @@ services:
       dockerfile: PricingService/Dockerfile
     image: dotnet-pricing-service
     container_name: dotnet-pricing-service
-    network_mode: host
+    ports:
+      - "5040:5040"
+      - "5041:5041"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_HTTPS_PORT: 5041
+      ASPNETCORE_URLS: ${ASPNETCORE_URLS_PRICING_SERVICE}
+      ASPNETCORE_Kestrel__Certificates__Default__Password: ${ASPNETCORE_KESTREL_CERTIFICATE_PASSWORD}
+      ASPNETCORE_Kestrel__Certificates__Default__Path: ${ASPNETCORE_KESTREL_CERTIFICATE_PATH}
+    volumes:
+      - ${CERTIFICATE_PATH}:/root/.dotnet/https
+   
+  
 
   dotnet-product-service:
     build: 
@@ -63,10 +133,24 @@ services:
       dockerfile: ProductService/Dockerfile
     image: dotnet-product-service
     container_name: dotnet-product-service
-    network_mode: host
+    ports:
+      - "5030:5030"
+      - "5031:5031"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_HTTPS_PORT: 5031
+      ASPNETCORE_URLS: ${ASPNETCORE_URLS_PRODUCT_SERVICE}
+      #ASPNETCORE_Kestrel__Certificates__Default__Password: ${ASPNETCORE_KESTREL_CERTIFICATE_PASSWORD}
+      #ASPNETCORE_Kestrel__Certificates__Default__Path: /root/.dotnet/https/myTLS.pfx
+    #volumes:
+    #  - C:\tmp\certs\:/root/.dotnet/https
+    # networks:
+    #   - scripts_default
+  
 
-  dotnet-web-vue:
-    build: ../Web
-    image: dotnet-web-vue
-    container_name: dotnet-web-vue
-    network_mode: host
+      
+  #dotnet-web-vue:
+  #  build: ../Web
+  #  image: dotnet-web-vue
+  #  container_name: dotnet-web-vue
+    #network_mode: host

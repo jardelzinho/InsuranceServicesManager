@@ -26,13 +26,16 @@ namespace PolicySearchService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var settings = new RabbitMQSettings();
+            Configuration.GetSection("RabbitMQSettings").Bind(settings);
+
             services.AddDiscoveryClient(Configuration);
             services.AddMvc()
                 .AddNewtonsoftJson()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
             services.AddMediatR();
             services.AddElasticSearch(Configuration.GetConnectionString("ElasticSearchConnection"));
-            services.AddRabbitListeners();
+            services.AddRabbitListeners(settings);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

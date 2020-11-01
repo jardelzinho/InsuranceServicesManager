@@ -12,7 +12,7 @@
         "AllowedScopes": []
       },
       "RouteClaimsRequirement": {
-        "userType" : "SALESMAN"
+        "userType": "SALESMAN"
       }
     },
     {
@@ -27,7 +27,7 @@
         "AllowedScopes": []
       },
       "RouteClaimsRequirement": {
-        "userType" : "SALESMAN"
+        "userType": "SALESMAN"
       }
     },
 
@@ -42,10 +42,10 @@
         "AllowedScopes": []
       },
       "RouteClaimsRequirement": {
-        "userType" : "SALESMAN"
+        "userType": "SALESMAN"
       },
       "AddHeadersToRequest": {
-        "AgentLogin" : "Claims[http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier] > value[0] > |"
+        "AgentLogin": "Claims[http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier] > value[0] > |"
       }
     },
 
@@ -60,7 +60,7 @@
         "AllowedScopes": []
       },
       "RouteClaimsRequirement": {
-        "userType" : "SALESMAN"
+        "userType": "SALESMAN"
       }
     },
 
@@ -76,7 +76,7 @@
         "AllowedScopes": []
       },
       "RouteClaimsRequirement": {
-        "userType" : "SALESMAN"
+        "userType": "SALESMAN"
       }
     },
 
@@ -91,14 +91,18 @@
         "AllowedScopes": []
       },
       "RouteClaimsRequirement": {
-        "userType" : "SALESMAN"
+        "userType": "SALESMAN"
       }
     }
   ],
   "GlobalConfiguration": {
     "RequestIdKey": "OcRequestId",
     "AdministrationPath": "/administration",
-    "UseServiceDiscovery" : true,
-    "ServiceDiscoveryProvider": { "Type": "Eureka", "Host" : "localhost", "Port" : "8761"}
+    "UseServiceDiscovery": true,
+    "ServiceDiscoveryProvider": {
+      "Type": "Eureka",
+      "Host": "192.168.1.191",
+      "Port": "8761"
+    }
   }
 }

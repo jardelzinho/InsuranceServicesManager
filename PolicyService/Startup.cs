@@ -24,6 +24,9 @@ namespace PolicyService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var settings = new RabbitMQSettings();
+            Configuration.GetSection("RabbitMQSettings").Bind(settings);
+
             services.AddDiscoveryClient(Configuration);
             services.AddMvc()
                 .AddNewtonsoftJson()
@@ -31,7 +34,7 @@ namespace PolicyService
             services.AddMediatR();
             services.AddPricingRestClient();
             services.AddNHibernate(Configuration.GetConnectionString("DefaultConnection"));
-            services.AddRabbit();
+            services.AddRabbitListeners(settings);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

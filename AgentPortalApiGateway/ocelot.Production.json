@@ -1,0 +1,26 @@
+{
+  "ReRoutes": [
+    {
+      "DownstreamPathTemplate": "/api/Products",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "insurance.microservices",
+          "Port": 5031
+        }
+      ],
+      "UpstreamPathTemplate": "/api/Products",
+      "UpstreamHttpMethod": [ "Get" ],
+      "FileCacheOptions": { "TtlSeconds": 15 },
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "ApiSecurity",
+        "AllowedScopes": []
+      },
+      "RouteClaimsRequirement": {
+        "userType": "SALESMAN"
+      }
+    }
+  ],
+  "GlobalConfiguration": {
+  }
+}

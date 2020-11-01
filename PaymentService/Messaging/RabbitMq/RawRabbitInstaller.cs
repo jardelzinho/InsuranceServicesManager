@@ -13,17 +13,17 @@ namespace PaymentService.Messaging.RabbitMq
 {
     public static class RawRabbitInstaller
     {
-        public static IServiceCollection AddRabbitListeners(this IServiceCollection services)
+        public static IServiceCollection AddRabbitListeners(this IServiceCollection services, RabbitMQSettings settings)
         {
             services.AddRawRabbit(new RawRabbitOptions
             {
                 ClientConfiguration = new RawRabbit.Configuration.RawRabbitConfiguration
                 {
-                    Username = "guest",
-                    Password = "guest",
+                    Username = settings.User,
+                    Password = settings.Pwd,
                     VirtualHost = "/",
-                    Port = 5672,
-                    Hostnames = new List<string> { "localhost" },
+                    Port = System.Convert.ToInt32(settings.Port),
+                    Hostnames = new List<string> { settings.Host },
                     RequestTimeout = TimeSpan.FromSeconds(10),
                     PublishConfirmTimeout = TimeSpan.FromSeconds(1),
                     RecoveryInterval = TimeSpan.FromSeconds(1),

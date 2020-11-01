@@ -6,13 +6,16 @@ namespace PaymentService.Init
 {
     public static class ApplicationBuilderExtensions
     {
-        public static async Task UseInitializer(this IApplicationBuilder app)
+        public static Task UseInitializer(this IApplicationBuilder app)
         {
-            using (var scope = app.ApplicationServices.CreateScope())
+            return Task.Run(async () =>
             {
-                var initializer = scope.ServiceProvider.GetService<DataLoader>();
-                await initializer.Seed();
-            }
+                using (var scope = app.ApplicationServices.CreateScope())
+                {
+                    var initializer = scope.ServiceProvider.GetService<DataLoader>();
+                    await initializer.Seed();
+                }
+            });
         }
     }
 }

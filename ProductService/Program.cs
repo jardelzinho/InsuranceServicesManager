@@ -1,9 +1,7 @@
-﻿using System.IO;
-using Microsoft.AspNetCore;
+﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using ProductService.DataAccess.EF;
+using System.IO;
 
 namespace ProductService
 {
@@ -12,22 +10,32 @@ namespace ProductService
         public static void Main(string[] args)
         {
             CreateWebHostBuilder(args)
-                .Build()
-                .Run();
+                .Build().Run();
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args)
         {
-            var config = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("hosting.json", optional: true)
-                .AddJsonFile("appsettings.json", optional: true)
-                .AddCommandLine(args)
-                .Build();
+            // IWebHostEnvironment ctx = null;
+            var host = WebHost.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration((hostingContext, config) => {
+                    config
+                        .SetBasePath(Directory.GetCurrentDirectory())
+                        .AddJsonFile("hosting.json", optional: true)
+                        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                        .AddJsonFile($"appsettings.{hostingContext.HostingEnvironment.EnvironmentName}.json", true, true)
+                        .AddCommandLine(args);
+                })
+                //.UseKestrel(options =>
+                //{
 
-            return WebHost.CreateDefaultBuilder(args)
-                .UseConfiguration(config)
+                //    options.Listen(System.Net.IPAddress.Loopback, 5031,
+                //                listenOptions =>
+                //                {
+                //                    listenOptions.UseHttps("insurance.microservices.pfx", "frsglobal77");
+                //                });
+                //})
                 .UseStartup<Startup>();
+            return host;
         }
     }
 }
